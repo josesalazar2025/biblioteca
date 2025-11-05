@@ -1,3 +1,5 @@
+from pathlib import Path
+import json
 
 class Formato: 
     """ 
@@ -98,3 +100,54 @@ class Revista(Formato):
         dato["anio"] = self.anio
         dato["area"] = self.area
         return dato
+
+class BibliotecaJSON:
+    """
+    Creación y gestión de la biblioteca
+    para trabajar con ella en memoria
+    y guardarla en un archivo json.
+    """
+
+    def __init__(self, ruta, biblioteca_base):
+        """
+        Se encapsulan los atributos para 
+        indicar que no deben ser modificados.
+        """
+        self._ruta = Path(ruta)
+        self._ruta.parent.mkdir(exist_ok=True)
+        self._biblioteca_base = biblioteca_base
+        self._biblioteca = []
+
+    def cargar_biblioteca(self):
+        """
+        Carga la biblioteca desde el archivo JSON.
+        Si no existe, crea el archivo con la biblioteca base.
+        """
+        if self._ruta.exists():
+            try:
+                with self._ruta.open('r', encoding='utf-8') as f:
+                    self._biblioteca = json.load(f)
+                return self._biblioteca
+            except FileNotFoundError:
+                print('Error: archivo no encontrado.')
+            except PermissionError:
+                print('Error: no tienes permisos para leer el archivo.')
+            except Exception as e:
+                print('Error inesperado:', type(e).__name__, e)
+        else:
+            print('No se encontró el archivo. Creando biblioteca base...')
+            self.actualizar_biblioteca(self._biblioteca_base)
+            self._biblioteca = self._biblioteca_base
+            return self._biblioteca
+
+    def actualizar_biblioteca(self, biblioteca):
+        """
+        Sobrescribe el json con la información actualizada.
+        """
+        try:
+            with self._ruta.open('w', encoding='utf-8') as f:
+                json.dump(biblioteca, f, ensure_ascii=False, indent=2)
+        except PermissionError:
+            print('Error: no tienes permisos para escribir en el archivo.')
+        except Exception as e:
+            print('Error inesperado:', type(e).__name__, e)
