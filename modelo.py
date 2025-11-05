@@ -55,3 +55,46 @@ class Formato:
             "disponible": self._disponible, 
             "usuario" : self._usuario 
             }
+
+class Libro(Formato):
+    """
+    Esta clase hija añade nuevos elementos
+    a los datos (año y genero)
+    """
+    def __init__(self, titulo, autor, anio, genero, disponible = True, usuario = None):
+        super().__init__(titulo, autor, disponible, usuario)
+        self.anio = anio
+        self.genero = genero
+       
+    def diccionario_datos(self):
+        """
+        Se agregan los nuevos datos
+        al diccionario creado en la 
+        clase padre.
+        """
+        dato = super().diccionario_datos()
+        dato["anio"] = self.anio
+        dato["genero"] = self.genero
+        return dato
+
+class Revista(Formato):
+    """
+    Esta clase hija añade nuevos elementos
+    a los datos (año y área, por ejemplo: 
+    Biología, Informática)
+    """
+    def __init__(self, titulo, autor, anio, area, disponible = True, usuario = None):
+        super().__init__(titulo, autor, disponible, usuario)
+        self.anio = anio
+        self.area = area
+        
+    def diccionario_datos(self):
+        """
+        Se agregan los nuevos datos
+        al diccionario creado en la 
+        clase padre.
+        """
+        dato = super().diccionario_datos()
+        dato["anio"] = self.anio
+        dato["area"] = self.area
+        return dato
