@@ -34,7 +34,6 @@ class Formato:
             self._disponible = False 
             self._usuario = usuario
 
-
     def devolver(self): 
         """ 
         Se valida si el libro esta disponible o 
@@ -58,10 +57,37 @@ class Formato:
             "usuario" : self._usuario 
             }
 
+    def busqueda_autor(diccionario_datos, autor_buscado):
+        """
+        Muestra las coincidencias que existan para la búsqueda por nombre de autor,
+        formateadas en consola con el mismo estilo que las funciones de listado.
+        """
+        coincidencias = [item for item in diccionario_datos if autor_buscado.lower() in item["autor"].lower()]
+
+        print('-' * 100)
+        print(f"RESULTADOS DE BÚSQUEDA - AUTOR: {autor_buscado.upper()}")
+        print('-' * 100)
+        print(f"{'TÍTULO'.ljust(35)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(6)}{'GÉNERO/ÁREA'.ljust(20)}{'ESTATUS'}")
+        print('-' * 100)
+
+        if coincidencias:
+            for elemento in coincidencias:
+                estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
+                # Si el elemento tiene "genero" (libros) o "area" (revistas), se muestra el campo correspondiente
+                categoria = elemento.get("genero", elemento.get("area", "N/A"))
+                print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{categoria.ljust(20)}{estatus}")
+        else:
+            print("No se encontraron coincidencias para ese autor.")
+        print('-' * 100)
+
+    
+
 class Libro(Formato):
     """
     Esta clase hija añade nuevos elementos
     a los datos (año y genero)
+    Además de mostrar sus elementos 
+    en consola con comportamiento propio.
     """
     def __init__(self, titulo, autor, anio, genero, disponible = True, usuario = None):
         super().__init__(titulo, autor, disponible, usuario)
@@ -78,12 +104,30 @@ class Libro(Formato):
         dato["anio"] = self.anio
         dato["genero"] = self.genero
         return dato
+    
+    def mostrar_libros(self, diccionario_datos):
+        """
+        Se muestra formateado para consola los libros
+        registradas en la base de datos.
+        """
+        print('-' * 105)
+        print('BIBLIOTECA DE LIBROS')
+        print('-' * 105)
+        print(f"{'TÍTULO'.ljust(35)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(6)}{'GÉNERO'.ljust(20)}{'ESTATUS'}")
+        print('-' * 105)
+        for elemento in diccionario_datos:
+            estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
+            print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{elemento['genero'].ljust(20)}{estatus}")
+        print('-' * 105)
+
 
 class Revista(Formato):
     """
     Esta clase hija añade nuevos elementos
     a los datos (año y área, por ejemplo: 
-    Biología, Informática)
+    Biología, Informática).
+    Además de mostrar sus elementos 
+    en consola con comportamiento propio.
     """
     def __init__(self, titulo, autor, anio, area, disponible = True, usuario = None):
         super().__init__(titulo, autor, disponible, usuario)
@@ -100,6 +144,22 @@ class Revista(Formato):
         dato["anio"] = self.anio
         dato["area"] = self.area
         return dato
+    
+    def mostrar_revistas(self, diccionario_datos):
+        """
+        Se muestra formateado para consola las revistas
+        registradas en la base de datos.
+        """
+        print('-' * 100)
+        print('BIBLIOTECA DE REVISTAS')
+        print('-' * 100)
+        print(f"{'TÍTULO'.ljust(30)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(8)}{'ÁREA'.ljust(18)}{'ESTATUS'}")
+        print('-' * 100)
+        for elemento in diccionario_datos:
+            estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
+            print(f"{elemento['titulo'].ljust(30)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(8)}{elemento['area'].ljust(18)}{estatus}")
+        print('-' * 100)
+
 
 class BibliotecaJSON:
     """
@@ -151,3 +211,5 @@ class BibliotecaJSON:
             print('Error: no tienes permisos para escribir en el archivo.')
         except Exception as e:
             print('Error inesperado:', type(e).__name__, e)
+
+
