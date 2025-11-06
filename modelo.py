@@ -6,17 +6,17 @@ class Formato:
     Esta será la super clase que engloba todos 
     los tipos de items disponibles en la biblioteca. 
     """ 
-    def __init__(self, titulo, autor, disponible = True, usuario = None): 
+    def __init__(self, titulo, autor, disponible = True, usuario = None): #Asignamos por defecto que el item se encuentra disponible y el valor de usuario vacío.
         self.titulo = titulo 
         self.autor = autor 
         self._disponible = disponible 
         self._usuario = usuario
 
     @property 
-    def disponible(self): #controlamos el acceso al estado del libro
+    def disponible(self): #controlamos el acceso al estado del libro.
         return self._disponible    
 
-    @property #Controlamos el acceso al nombre del usuario
+    @property #Controlamos el acceso al nombre del usuario.
     def usuario(self): 
         return self._usuario
     
@@ -73,14 +73,12 @@ class Formato:
         if coincidencias:
             for elemento in coincidencias:
                 estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
-                # Si el elemento tiene "genero" (libros) o "area" (revistas), se muestra el campo correspondiente
+                # Si el elemento tiene "genero" (libros) o "area" (revistas), se muestra el campo correspondiente.
                 categoria = elemento.get("genero", elemento.get("area", "N/A"))
                 print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{categoria.ljust(20)}{estatus}")
         else:
             print("No se encontraron coincidencias para ese autor.")
         print('-' * 100)
-
-    
 
 class Libro(Formato):
     """
@@ -115,7 +113,7 @@ class Libro(Formato):
         print('-' * 105)
         print(f"{'TÍTULO'.ljust(35)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(6)}{'GÉNERO'.ljust(20)}{'ESTATUS'}")
         print('-' * 105)
-        for elemento in diccionario_datos:
+        for elemento in diccionario_datos: #Mostramos el libro como "disponible" o en caso de que este prestada se indica el nombre del usuario.
             estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
             print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{elemento['genero'].ljust(20)}{estatus}")
         print('-' * 105)
@@ -155,11 +153,24 @@ class Revista(Formato):
         print('-' * 100)
         print(f"{'TÍTULO'.ljust(30)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(8)}{'ÁREA'.ljust(18)}{'ESTATUS'}")
         print('-' * 100)
-        for elemento in diccionario_datos:
+        for elemento in diccionario_datos: #Mostramos la revista como "disponible" o en caso de que este prestada se indica el nombre del usuario.
             estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
             print(f"{elemento['titulo'].ljust(30)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(8)}{elemento['area'].ljust(18)}{estatus}")
         print('-' * 100)
 
+
+ruta = 'biblioteca/biblioteca.json' #Establecemos el directorio y el nombre del archivo json.
+
+#Generamos una biblioteca base para pruebas. En vez de usar una lista de diccionarios utilizamos las subclases y sus atributos para generar objetos.
+biblioteca_base = [
+    Libro('El Conde de Montecristo', 'Alexandre Dumas', 1845, 'Novela').diccionario_datos(),
+    Libro('Así habló Zaratustra', 'Friedrich Nietzsche', 1883, 'Novela/Poesía').diccionario_datos(),
+    Libro('Los hermanos Karamazov', 'Fiódor Dostoyevski', 1880, 'Novela').diccionario_datos(),
+    Libro('Walden', 'Henry David Thoreau', 1845, 'Autobiografía').diccionario_datos(),
+    Revista('National Geographic', 'Varios', 2023, 'Ciencia').diccionario_datos(),
+    Revista('Nature', 'Varios', 2023, 'Ciencia').diccionario_datos(),
+    Revista('Der Spiegel', 'Varios', 2023, 'Semanario').diccionario_datos()
+    ]
 
 class BibliotecaJSON:
     """
@@ -211,5 +222,3 @@ class BibliotecaJSON:
             print('Error: no tienes permisos para escribir en el archivo.')
         except Exception as e:
             print('Error inesperado:', type(e).__name__, e)
-
-
