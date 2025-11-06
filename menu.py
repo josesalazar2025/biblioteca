@@ -1,5 +1,5 @@
 
-import os, modelo
+import os
 if os.name == 'nt':
     os.system('cls')
 
