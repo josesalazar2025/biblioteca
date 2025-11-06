@@ -1,5 +1,5 @@
 
-import os
+import os, modelo
 if os.name == 'nt':
     os.system('cls')
 
@@ -30,6 +30,7 @@ def main():
         match opcion:
             case 1:
                 pass
+                # modelo.biblioteca.añadir_libro(biblioteca)
             case 2:
                 pass 
             case 3:
