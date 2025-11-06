@@ -7,11 +7,18 @@ class Formato:
     los tipos de items disponibles en la biblioteca. 
     """ 
     def __init__(self, titulo, autor, disponible = True, usuario = None): #Asignamos por defecto que el item se encuentra disponible y el valor de usuario vacío.
-        self.titulo = titulo 
-        self.autor = autor 
+        self._titulo = titulo 
+        self._autor = autor 
         self._disponible = disponible 
         self._usuario = usuario
-
+        
+    @property
+    def titulo(self):
+        return self._titulo
+    @property
+    def autor(self):
+        return self._autor
+    
     @property 
     def disponible(self): #controlamos el acceso al estado del libro.
         return self._disponible    
@@ -20,7 +27,10 @@ class Formato:
     def usuario(self): 
         return self._usuario
     
-    def prestar(self, usuario): 
+    
+   
+    
+    def prestar(self, biblioteca): 
         """ 
         Validamos si se encuentra disponible 
         en la biblioteca o ha sido prestado. 
@@ -28,11 +38,16 @@ class Formato:
         tiene el libro. Se modifican los valores 
         correspondientes 
         """ 
-        if not self._disponible: 
-            print(f' {self.titulo} no se encuentra disponible, se ha prestado a {self._usuario}') 
-        else: 
-            self._disponible = False 
-            self._usuario = usuario
+        titulo = input('Entre el titulo: ')
+        usuario = input('Entre nombre de la persona: ')
+        for libro in biblioteca:
+            if libro["titulo"] == titulo:
+                if not self._disponible: 
+                    print(f' {self.titulo} no se encuentra disponible, se ha prestado a {self._usuario}') 
+                else: 
+                    self._disponible = False 
+                    self._usuario = usuario
+                    print(f'El titulo se a prestado corectamente {self._usuario}')
 
     def devolver(self): 
         """ 
@@ -118,7 +133,47 @@ class Libro(Formato):
             print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{elemento['genero'].ljust(20)}{estatus}")
         print('-' * 105)
 
+    def agregar_libro(self, biblioteca):
 
+        try:
+            tipo = int(input('Entre tipo 1 para Libro y 2 para Revista.  '))
+            if tipo <= 0 or tipo >= 3:
+                print('Por favor entre 1 para Libro y 2 para Revista.')
+                return
+        except ValueError:
+            print('Debes introduce un numero valido...')
+            return
+        titulo = input('Escribe el titulo del libro: ')
+        if titulo == '':
+            print('No puede un titulo vacio.')
+            return
+            
+        autor = input('Escribe el nombre del autor: ')
+        if autor == '':
+            print('No puede un titulo vacio.')
+            return
+        while True:
+            try:
+                anio = int(input('Escribe el año de publicación: '))
+                if anio <= 0:
+                    print('Por favor entre un valor positivo.')
+                break
+            except ValueError:
+                print('Debes introduce un numero valido...')
+        genero = input('Escribe el género del libro: ')
+        
+        
+        if tipo == 1:
+            Libro(titulo, autor, anio, genero)
+            nuevo_libro = Libro(titulo, autor, anio, genero)
+            biblioteca.append(nuevo_libro.diccionario_datos())
+            print(f'Libro añadir correctamente. {nuevo_libro.titulo}')
+        else:
+            Revista(titulo, autor, anio, genero)
+            nuevo_revista = Revista(titulo, autor, anio, genero)
+            biblioteca.append(nuevo_revista.diccionario_datos())
+            print(f'Revista añadir correctamente. {nuevo_revista.titulo}')
+            
 class Revista(Formato):
     """
     Esta clase hija añade nuevos elementos
