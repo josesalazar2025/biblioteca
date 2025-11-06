@@ -5,20 +5,21 @@ if os.name == 'nt':
     os.system('cls')
 
 biblioteca_json = BibliotecaJSON(ruta, biblioteca_base)
-biblioteca = biblioteca_json.cargar_biblioteca()
+
 print('Bienvenido a Library_Wizard 1.0, biblioteca personal...')
 
 def main():
     continuar = True
+    biblioteca = biblioteca_json.cargar_biblioteca()
 
     while continuar:
         print(
         '''
         1. Ver Biblioteca 
-        2. Agregar libro
-        3. Prestar libro
-        4. Devolver libro
-        5. Buscar libro
+        2. Agregar a la biblioteca
+        3. Prestamos
+        4. Devoluciones
+        5. Buscar por nombre de autor
         6. Salir del programa
         '''
         )
@@ -31,18 +32,11 @@ def main():
 
         match opcion:
             case 1:
-                libros = [item for item in biblioteca if "genero" in item]
-                revistas = [item for item in biblioteca if "area" in item]
-
-                if libros:
-                    Libro.mostrar_libros(Libro, libros)
-                if revistas:
-                    Revista.mostrar_revistas(Revista, revistas)
-                if not biblioteca:
-                    print("La biblioteca está vacía.")
+                Libro.mostrar_libros(Libro, biblioteca)
+                Revista.mostrar_revistas(Revista, biblioteca)
             case 2:
                 Libro.agregar_libro(Libro, biblioteca)
-                biblioteca_json.actualizar_biblioteca(biblioteca) 
+                biblioteca_json.actualizar_biblioteca(biblioteca)
             case 3:
                 pass            
             case 4:
