@@ -134,10 +134,32 @@ class Libro(Formato):
         print('-' * 105)
 
     def agregar_libro(self, biblioteca):
-        tipo= int(input('Entre tipo de libro.  '))
+
+        try:
+            tipo = int(input('Entre tipo 1 para Libro y 2 para Revista.  '))
+            if tipo <= 0 or tipo >= 3:
+                print('Por favor entre 1 para Libro y 2 para Revista.')
+                return
+        except ValueError:
+            print('Debes introduce un numero valido...')
+            return
         titulo = input('Escribe el titulo del libro: ')
-        autor = input('Escribe el autor: ')
-        anio = int(input('Escribe el año de publicación: '))
+        if titulo == '':
+            print('No puede un titulo vacio.')
+            return
+            
+        autor = input('Escribe el nombre del autor: ')
+        if autor == '':
+            print('No puede un titulo vacio.')
+            return
+        while True:
+            try:
+                anio = int(input('Escribe el año de publicación: '))
+                if anio <= 0:
+                    print('Por favor entre un valor positivo.')
+                break
+            except ValueError:
+                print('Debes introduce un numero valido...')
         genero = input('Escribe el género del libro: ')
         
         

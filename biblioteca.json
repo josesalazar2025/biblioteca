@@ -70,5 +70,29 @@
     "usuario": null,
     "anio": 222,
     "genero": "ddd"
+  },
+  {
+    "titulo": "Pride and Prejudice",
+    "autor": "Jane austin",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1880,
+    "area": "novel"
+  },
+  {
+    "titulo": "0",
+    "autor": "",
+    "disponible": true,
+    "usuario": null,
+    "anio": 2001,
+    "area": "asdas"
+  },
+  {
+    "titulo": "Dr. Fastus",
+    "autor": "Fastus",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1800,
+    "area": "novel"
   }
 ]
