@@ -6,9 +6,14 @@ PARTICIPANTES:
 2. José Salazar
 
 CONTRIBUCIONES:
+<<<<<<< HEAD
 
 - modelo.py -> José Salazar
 - menu.py y fx agregar_libro -> Adeel Fiaz
+=======
+- Clases y sub clases y sus respectivas funciones en modelo.py, gestión del repositorio -> José Salazar
+- menu.py, fx agregar_libro, colaboración en solución de problemas con algunas de las funciones y trabajo en conjunto para funciones prestar y devolver. -> Adeel Fiaz
+>>>>>>> main
 
 MÓDULOS UTILIZADOS:
 
