@@ -141,7 +141,7 @@ class Revista(Formato):
         print('-' * 100)
 
 
-ruta = 'biblioteca/biblioteca.json' #Establecemos el directorio y el nombre del archivo json.
+ruta = 'biblioteca/catalogo.json' #Establecemos el directorio y el nombre del archivo json.
 
 #Generamos una biblioteca base para pruebas
 biblioteca_base = [
