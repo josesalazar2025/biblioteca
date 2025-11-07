@@ -6,7 +6,7 @@ if os.name == 'nt':
 
 biblioteca_json = BibliotecaJSON(ruta, biblioteca_base)
 
-print('Bienvenido a Library_Wizard 1.0, biblioteca personal...')
+print('Bienvenido al sistema de gestión de biblioteca...')
 
 def main():
     continuar = True
@@ -35,16 +35,20 @@ def main():
                 Libro.mostrar_libros(Libro, biblioteca)
                 Revista.mostrar_revistas(Revista, biblioteca)
             case 2:
-                Libro.agregar_libro(Libro, biblioteca)
+                biblioteca_json.agregar()
                 biblioteca_json.actualizar_biblioteca(biblioteca)
             case 3:
-                pass            
+                titulo = input('Escribe el título a prestar: ')
+                usuario = input('Nombre del usuario: ')
+                biblioteca_json.prestar(titulo, usuario)
             case 4:
-                pass   
+                titulo = input('Escribe el título a devolver: ')
+                biblioteca_json.devolver(titulo)   
             case 5:
-                pass
+                autor = input('Escribe el autor a buscar: ')
+                Formato.busqueda_autor(Formato, biblioteca, autor)
             case 6:
-                print('Gracias por usar el programa.')
+                print('Gracias por usar el programa...')
                 continuar = False            
             case _:
                 print('Debes escoger una opción del 1 al 6')
