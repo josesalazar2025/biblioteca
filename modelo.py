@@ -15,51 +15,18 @@ class Formato:
     @property
     def titulo(self):
         return self._titulo
+    
     @property
     def autor(self):
         return self._autor
     
     @property 
-    def disponible(self): #controlamos el acceso al estado del libro.
+    def disponible(self): 
         return self._disponible    
 
-    @property #Controlamos el acceso al nombre del usuario.
+    @property 
     def usuario(self): 
         return self._usuario
-    
-    
-   
-    
-    def prestar(self, biblioteca): 
-        """ 
-        Validamos si se encuentra disponible 
-        en la biblioteca o ha sido prestado. 
-        Asignamos el nombre del usuario que 
-        tiene el libro. Se modifican los valores 
-        correspondientes 
-        """ 
-        titulo = input('Entre el titulo: ')
-        usuario = input('Entre nombre de la persona: ')
-        for libro in biblioteca:
-            if libro["titulo"] == titulo:
-                if not self._disponible: 
-                    print(f' {self.titulo} no se encuentra disponible, se ha prestado a {self._usuario}') 
-                else: 
-                    self._disponible = False 
-                    self._usuario = usuario
-                    print(f'El titulo se a prestado corectamente {self._usuario}')
-
-    def devolver(self): 
-        """ 
-        Se valida si el libro esta disponible o 
-        ha sido prestado. Se modifican los valores 
-        correspondientes 
-        """ 
-        if self._disponible: 
-            print(f"El recurso '{self.titulo}' ya ha sido devuelto.") 
-        else: 
-            self._disponible = True 
-            self._usuario = None
 
     def diccionario_datos(self): 
         """ Se crea un diccionario con los datos 
@@ -68,16 +35,16 @@ class Formato:
         return { 
             "titulo": self.titulo, 
             "autor" : self.autor, 
-            "disponible": self._disponible, 
-            "usuario" : self._usuario 
+            "disponible": self.disponible, 
+            "usuario" : self.usuario 
             }
 
-    def busqueda_autor(diccionario_datos, autor_buscado):
+    def busqueda_autor(self, biblioteca, autor_buscado):
         """
         Muestra las coincidencias que existan para la búsqueda por nombre de autor,
         formateadas en consola con el mismo estilo que las funciones de listado.
         """
-        coincidencias = [item for item in diccionario_datos if autor_buscado.lower() in item["autor"].lower()]
+        coincidencias = [item for item in biblioteca if autor_buscado.lower() in item["autor"].lower()]
 
         print('-' * 100)
         print(f"RESULTADOS DE BÚSQUEDA - AUTOR: {autor_buscado.upper()}")
@@ -88,7 +55,6 @@ class Formato:
         if coincidencias:
             for elemento in coincidencias:
                 estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
-                # Si el elemento tiene "genero" (libros) o "area" (revistas), se muestra el campo correspondiente.
                 categoria = elemento.get("genero", elemento.get("area", "N/A"))
                 print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{categoria.ljust(20)}{estatus}")
         else:
@@ -118,7 +84,7 @@ class Libro(Formato):
         dato["genero"] = self.genero
         return dato
     
-    def mostrar_libros(self, diccionario_datos):
+    def mostrar_libros(self, biblioteca):
         """
         Se muestra formateado para consola los libros
         registradas en la base de datos.
@@ -128,51 +94,11 @@ class Libro(Formato):
         print('-' * 105)
         print(f"{'TÍTULO'.ljust(35)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(6)}{'GÉNERO'.ljust(20)}{'ESTATUS'}")
         print('-' * 105)
-        for elemento in diccionario_datos: #Mostramos el libro como "disponible" o en caso de que este prestada se indica el nombre del usuario.
-            estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
-            print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{elemento['genero'].ljust(20)}{estatus}")
+        for elemento in biblioteca:
+            if "genero" in elemento:
+                estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
+                print(f"{elemento['titulo'].ljust(35)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(6)}{elemento['genero'].ljust(20)}{estatus}")
         print('-' * 105)
-
-    def agregar_libro(self, biblioteca):
-
-        try:
-            tipo = int(input('Entre tipo 1 para Libro y 2 para Revista.  '))
-            if tipo <= 0 or tipo >= 3:
-                print('Por favor entre 1 para Libro y 2 para Revista.')
-                return
-        except ValueError:
-            print('Debes introduce un numero valido...')
-            return
-        titulo = input('Escribe el titulo del libro: ')
-        if titulo == '':
-            print('No puede un titulo vacio.')
-            return
-            
-        autor = input('Escribe el nombre del autor: ')
-        if autor == '':
-            print('No puede un titulo vacio.')
-            return
-        while True:
-            try:
-                anio = int(input('Escribe el año de publicación: '))
-                if anio <= 0:
-                    print('Por favor entre un valor positivo.')
-                break
-            except ValueError:
-                print('Debes introduce un numero valido...')
-        genero = input('Escribe el género del libro: ')
-        
-        
-        if tipo == 1:
-            Libro(titulo, autor, anio, genero)
-            nuevo_libro = Libro(titulo, autor, anio, genero)
-            biblioteca.append(nuevo_libro.diccionario_datos())
-            print(f'Libro añadir correctamente. {nuevo_libro.titulo}')
-        else:
-            Revista(titulo, autor, anio, genero)
-            nuevo_revista = Revista(titulo, autor, anio, genero)
-            biblioteca.append(nuevo_revista.diccionario_datos())
-            print(f'Revista añadir correctamente. {nuevo_revista.titulo}')
             
 class Revista(Formato):
     """
@@ -198,7 +124,7 @@ class Revista(Formato):
         dato["area"] = self.area
         return dato
     
-    def mostrar_revistas(self, diccionario_datos):
+    def mostrar_revistas(self, biblioteca):
         """
         Se muestra formateado para consola las revistas
         registradas en la base de datos.
@@ -208,15 +134,16 @@ class Revista(Formato):
         print('-' * 100)
         print(f"{'TÍTULO'.ljust(30)}{'AUTOR'.ljust(25)}{'AÑO'.ljust(8)}{'ÁREA'.ljust(18)}{'ESTATUS'}")
         print('-' * 100)
-        for elemento in diccionario_datos: #Mostramos la revista como "disponible" o en caso de que este prestada se indica el nombre del usuario.
-            estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
-            print(f"{elemento['titulo'].ljust(30)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(8)}{elemento['area'].ljust(18)}{estatus}")
+        for elemento in biblioteca:
+            if "area" in elemento:
+                estatus = "Disponible" if elemento["disponible"] else f"Prestado a {elemento['usuario']}"
+                print(f"{elemento['titulo'].ljust(30)}{elemento['autor'].ljust(25)}{str(elemento['anio']).ljust(8)}{elemento['area'].ljust(18)}{estatus}")
         print('-' * 100)
 
 
 ruta = 'biblioteca/biblioteca.json' #Establecemos el directorio y el nombre del archivo json.
 
-#Generamos una biblioteca base para pruebas. En vez de usar una lista de diccionarios utilizamos las subclases y sus atributos para generar objetos.
+#Generamos una biblioteca base para pruebas
 biblioteca_base = [
     Libro('El Conde de Montecristo', 'Alexandre Dumas', 1845, 'Novela').diccionario_datos(),
     Libro('Así habló Zaratustra', 'Friedrich Nietzsche', 1883, 'Novela/Poesía').diccionario_datos(),
@@ -277,3 +204,112 @@ class BibliotecaJSON:
             print('Error: no tienes permisos para escribir en el archivo.')
         except Exception as e:
             print('Error inesperado:', type(e).__name__, e)
+
+    def agregar(self):
+        """ 
+        Se valida la entrada de datos para evitar 
+        tipos incorrectos o campos vaciós
+        """  
+        print(
+        '''
+        1. Agregar un libro
+        2. Agregar una revista
+        3. Volver al menú principal 
+        ''')
+
+        try:
+            tipo = int(input('Escoge una opción: '))
+            if tipo < 1 or tipo > 3:
+                print('Debes escoger una opción entre 1 y 3...')
+                return
+        except ValueError:
+            print('Debes introducir un número válido...')
+            return
+
+        if tipo == 3:
+            print('Volviendo al menú principal...')
+            return
+        
+        while True:
+            titulo = input('Escribe el título: ').strip()
+            if titulo:
+                break
+            print('El campo no puede estar vacío.')
+
+        while True:
+            autor = input('Escribe el autor: ').strip()
+            if autor:
+                break
+            print('El campo no puede estar vacío.')
+
+        while True:
+            try:
+                anio = int(input('Escribe el año de publicación: '))
+                if anio > 0:
+                    break
+                print('Por favor introduce un valor positivo.')
+            except ValueError:
+                print('Debes introducir un valor numérico.')
+
+        if tipo == 1:
+            while True:
+                genero = input('Escribe el género del libro: ').strip()
+                if genero:
+                    break
+                print('El campo no puede estar vacío.')
+
+            nuevo_libro = Libro(titulo, autor, anio, genero)
+            self._biblioteca.append(nuevo_libro.diccionario_datos())
+            self.actualizar_biblioteca(self._biblioteca)
+            print(f"Libro agregado correctamente: {nuevo_libro.titulo}")
+
+        elif tipo == 2:
+            while True:
+                area = input('Escribe el área de la revista: ').strip()
+                if area:
+                    break
+                print('El campo no puede estar vacío.')
+
+            nueva_revista = Revista(titulo, autor, anio, area)
+            self._biblioteca.append(nueva_revista.diccionario_datos())
+            self.actualizar_biblioteca(self._biblioteca)
+            print(f"Revista agregada correctamente: {nueva_revista.titulo}")
+
+    def prestar(self, titulo, usuario):
+        """ 
+        Validamos si se encuentra disponible 
+        en la biblioteca o ha sido prestado. 
+        Asignamos el nombre del usuario que 
+        tiene el libro. 
+        """ 
+        for elemento in self._biblioteca:
+            if elemento["titulo"].lower() == titulo.lower():
+                if not elemento["disponible"]:
+                    print(f"'{titulo}' no se encuentra disponible. Prestado a {elemento['usuario']}.")
+                    return
+                elemento["disponible"] = False
+                elemento["usuario"] = usuario
+                print(f"'{titulo}' se ha prestado correctamente a {usuario}.")
+                self.actualizar_biblioteca(self._biblioteca)
+                return
+        print("No se encontró el título.")
+
+    def devolver(self, titulo):
+        """ 
+        Se valida si el libro esta disponible o 
+        ha sido prestado. Se modifican los valores 
+        correspondientes 
+        """ 
+        for elemento in self._biblioteca:
+            if elemento["titulo"].lower() == titulo.lower():
+                if elemento["disponible"]:
+                    print(f"'{titulo}' ya estaba disponible.")
+                    return
+                elemento["disponible"] = True
+                elemento["usuario"] = None
+                print(f"'{titulo}' ha sido devuelto correctamente.")
+                self.actualizar_biblioteca(self._biblioteca)
+                return
+        print("No se encontró el título.")
+
+    
