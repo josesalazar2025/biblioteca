@@ -38,14 +38,11 @@ def main():
                 biblioteca_json.agregar()
                 biblioteca_json.actualizar_biblioteca(biblioteca)
             case 3:
-                titulo = input('Escribe el título a prestar: ')
-                usuario = input('Nombre del usuario: ')
-                biblioteca_json.prestar(titulo, usuario)
+                biblioteca_json.prestar()
             case 4:
-                titulo = input('Escribe el título a devolver: ')
-                biblioteca_json.devolver(titulo)   
+                biblioteca_json.devolver()
             case 5:
-                autor = input('Escribe el autor a buscar: ')
+                autor = input('Escribe el autor a buscar: ').strip().title()
                 Formato.busqueda_autor(Formato, biblioteca, autor)
             case 6:
                 print('Gracias por usar el programa...')

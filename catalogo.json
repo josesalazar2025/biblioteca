@@ -1,0 +1,82 @@
+[
+  {
+    "titulo": "El Conde de Montecristo",
+    "autor": "Alexandre Dumas",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1845,
+    "genero": "Novela"
+  },
+  {
+    "titulo": "Así habló Zaratustra",
+    "autor": "Friedrich Nietzsche",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1883,
+    "genero": "Novela/Poesía"
+  },
+  {
+    "titulo": "Los hermanos Karamazov",
+    "autor": "Fiódor Dostoyevski",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1880,
+    "genero": "Novela"
+  },
+  {
+    "titulo": "Walden",
+    "autor": "Henry David Thoreau",
+    "disponible": true,
+    "usuario": null,
+    "anio": 1845,
+    "genero": "Autobiografía"
+  },
+  {
+    "titulo": "National Geographic",
+    "autor": "Varios",
+    "disponible": true,
+    "usuario": null,
+    "anio": 2023,
+    "area": "Ciencia"
+  },
+  {
+    "titulo": "Nature",
+    "autor": "Varios",
+    "disponible": true,
+    "usuario": null,
+    "anio": 2023,
+    "area": "Ciencia"
+  },
+  {
+    "titulo": "Der Spiegel",
+    "autor": "Varios",
+    "disponible": true,
+    "usuario": null,
+    "anio": 2023,
+    "area": "Semanario"
+  },
+  {
+    "titulo": "dddd",
+    "autor": "dddd",
+    "disponible": true,
+    "usuario": null,
+    "anio": 4444,
+    "genero": "ddd"
+  },
+  {
+    "titulo": "Ggggg",
+    "autor": "Fff",
+    "disponible": true,
+    "usuario": null,
+    "anio": 200,
+    "genero": "Sdsd"
+  },
+  {
+    "titulo": "Sss",
+    "autor": "Ddd",
+    "disponible": true,
+    "usuario": null,
+    "anio": 222,
+    "genero": "Dddd"
+  }
+]
