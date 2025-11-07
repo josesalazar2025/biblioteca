@@ -44,7 +44,7 @@ class Formato:
         Muestra las coincidencias que existan para la búsqueda por nombre de autor,
         formateadas en consola con el mismo estilo que las funciones de listado.
         """
-        coincidencias = [item for item in biblioteca if autor_buscado.lower() in item["autor"].lower()]
+        coincidencias = [item for item in biblioteca if autor_buscado.strip().title() in item["autor"].strip().title()]
 
         print('-' * 100)
         print(f"RESULTADOS DE BÚSQUEDA - AUTOR: {autor_buscado.upper()}")
@@ -231,13 +231,13 @@ class BibliotecaJSON:
             return
         
         while True:
-            titulo = input('Escribe el título: ').strip()
+            titulo = input('Escribe el título: ').strip().capitalize()
             if titulo:
                 break
             print('El campo no puede estar vacío.')
 
         while True:
-            autor = input('Escribe el autor: ').strip()
+            autor = input('Escribe el autor: ').strip().title()
             if autor:
                 break
             print('El campo no puede estar vacío.')
@@ -253,7 +253,7 @@ class BibliotecaJSON:
 
         if tipo == 1:
             while True:
-                genero = input('Escribe el género del libro: ').strip()
+                genero = input('Escribe el género del libro: ').strip().capitalize()
                 if genero:
                     break
                 print('El campo no puede estar vacío.')
@@ -265,7 +265,7 @@ class BibliotecaJSON:
 
         elif tipo == 2:
             while True:
-                area = input('Escribe el área de la revista: ').strip()
+                area = input('Escribe el área de la revista: ').strip().capitalize()
                 if area:
                     break
                 print('El campo no puede estar vacío.')
@@ -275,15 +275,23 @@ class BibliotecaJSON:
             self.actualizar_biblioteca(self._biblioteca)
             print(f"Revista agregada correctamente: {nueva_revista.titulo}")
 
-    def prestar(self, titulo, usuario):
+    def prestar(self):
         """ 
-        Validamos si se encuentra disponible 
+        Valida si el libro se encuentra disponible 
         en la biblioteca o ha sido prestado. 
-        Asignamos el nombre del usuario que 
+        Asigna el nombre del usuario que 
         tiene el libro. 
         """ 
+        if all(not elemento["disponible"] for elemento in self._biblioteca):
+            print("No hay nada para prestar. Todos los artículos están prestados.")
+        else:
+            titulo = input('Escribe el título a prestar: ').strip().capitalize()
+            usuario = input('Nombre del usuario: ').strip().title()
+        encontrado = False
+        
         for elemento in self._biblioteca:
-            if elemento["titulo"].lower() == titulo.lower():
+            if elemento["titulo"].strip().lower() == titulo.strip().lower():
+                encontrado = True
                 if not elemento["disponible"]:
                     print(f"'{titulo}' no se encuentra disponible. Prestado a {elemento['usuario']}.")
                     return
@@ -292,16 +300,26 @@ class BibliotecaJSON:
                 print(f"'{titulo}' se ha prestado correctamente a {usuario}.")
                 self.actualizar_biblioteca(self._biblioteca)
                 return
-        print("No se encontró el título.")
+        if not encontrado:
+            print("No se encontró el título.")
 
-    def devolver(self, titulo):
+    def devolver(self):
         """ 
-        Se valida si el libro esta disponible o 
+        Se valida si el libro está disponible o 
         ha sido prestado. Se modifican los valores 
-        correspondientes 
+        correspondientes. 
         """ 
+        if all(elemento["disponible"] for elemento in self._biblioteca):
+            print("No hay nada para devolver. Todos los artículos están disponibles.")
+            return
+        else: 
+            titulo = input('Escribe el título a devolver: ').strip().lower()
+
+        encontrado = False 
+
         for elemento in self._biblioteca:
-            if elemento["titulo"].lower() == titulo.lower():
+            if elemento["titulo"].strip().lower() == titulo.strip().lower():
+                encontrado = True  
                 if elemento["disponible"]:
                     print(f"'{titulo}' ya estaba disponible.")
                     return
@@ -310,6 +328,8 @@ class BibliotecaJSON:
                 print(f"'{titulo}' ha sido devuelto correctamente.")
                 self.actualizar_biblioteca(self._biblioteca)
                 return
-        print("No se encontró el título.")
+        if not encontrado:
+            print("No se encontró el título.")
 
-    
+
+        
